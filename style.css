@@ -1,0 +1,57 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Yüksekliği tam sayfa yapmak için */
+}
+
+.container {
+    text-align: center; /* Başlığı ortalamak için */
+    margin-top: -50px; /* Tablonun yukarı alınması için negatif margin */
+}
+
+h1 {
+    color: #ff7f30;
+    margin-bottom: 10px;
+}
+
+table {
+    width: 100%; /* Tablonun genişliğini ayarladım */
+    max-width: 400px; /* Maksimum genişliği 400px olarak ayarladım */
+    border-collapse: collapse;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 12px; /* Daha küçük yazı boyutu */
+    margin: 0 auto; /* Tablonun ortalanması için */
+}
+
+th, td {
+    padding: 8px; /* Daha az padding */
+    border: 1px solid #ffb74d;
+    text-align: left;
+}
+
+th {
+    background-color: #ff8c42;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #fff3e0;
+}
+
+tr:hover {
+    background-color: #ffe0b2;
+}
+
+@media (max-width: 600px) {
+    th, td {
+        font-size: 10px; /* Mobil için daha küçük yazı boyutu */
+    }
+}
