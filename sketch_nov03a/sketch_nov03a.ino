@@ -1,31 +1,69 @@
-#define ECHO_PIN 26
-#define TRIG_PIN 25  
+#include <WiFi.h>
+#include <HTTPClient.h>
 
-void distance_calc();
+// Wi-Fi ağınızın SSID ve parolasını buraya girin
+const char* ssid = "YOUR_SSID";  // Wi-Fi SSID
+const char* password = "YOUR_PASSWORD";  // Wi-Fi password
+
+// Sunucu URL'sini buraya girin
+const char* serverName = "http://iotapplications.lovestoblog.com/post-data.php";
+
+// Sensör verilerinizi tanımlayın
+String sensorName = "Distance";
+String sensorLocation = "HomeOffice";
+
+// ESP32'yi başlatın
 void setup() {
   Serial.begin(115200);
-  pinMode(TRIG_PIN, OUTPUT);
-  pinMode(ECHO_PIN, INPUT);
+  
+  // Wi-Fi bağlantısını başlatın
+  WiFi.begin(ssid, password);
+  Serial.println("Connecting to WiFi...");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.print("WiFi connected. IP address: ");
+  Serial.println(WiFi.localIP());
 }
 
 void loop() {
-  distance_calc();
+  // Wi-Fi bağlantısını kontrol edin
+  if (WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+
+    // HTTP POST isteğini başlatın
+    http.begin(serverName);
+
+    // Header ekleyin
+    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    // Sensör değerlerini burada hesaplayın
+    float distance = 0.92;  // Buraya gerçek sensör değerini ekleyin
+    String httpRequestData = "sensor=" + sensorName + "&location=" + sensorLocation + "&value=" + String(distance);
+    
+    Serial.print("httpRequestData: ");
+    Serial.println(httpRequestData);
+
+    // POST isteği gönderin
+    int httpResponseCode = http.POST(httpRequestData);
+
+    // Yanıt kodunu kontrol edin
+    if (httpResponseCode > 0) {
+      Serial.print("HTTP Response code: ");
+      Serial.println(httpResponseCode);
+    } else {
+      Serial.print("Error code: ");
+      Serial.println(httpResponseCode);
+    }
+
+    // HTTP istemcisini kapatın
+    http.end();
+  } else {
+    Serial.println("WiFi Disconnected");
+  }
   
-}
-
-void distance_calc() {
-  
-  digitalWrite(TRIG_PIN, LOW);
-  delayMicroseconds(2);
-
-  digitalWrite(TRIG_PIN, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(TRIG_PIN, LOW);
-
-  long duration = pulseIn(ECHO_PIN, HIGH);
-
-  float distance = duration * 0.034 / 2;
-
-  Serial.printf("Distance = %.2f cm \n", distance);
-  delay(500);
+  // Belirli bir süre bekleyin
+  delay(30000);  // 30 saniye bekle
 }
