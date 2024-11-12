@@ -29,6 +29,7 @@ table {
     overflow: hidden;
     font-size: 12px; /* Daha küçük yazı boyutu */
     margin: 0 auto; /* Tablonun ortalanması için */
+    white-space: nowrap;
 }
 
 th, td {
@@ -40,6 +41,7 @@ th, td {
 th {
     background-color: #ff8c42;
     color: white;
+    white-space: nowrap;
 }
 
 tr:nth-child(even) {
